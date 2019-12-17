@@ -1,18 +1,24 @@
+import os, sys
 import tkinter as tk
 from tkinter import font
 import requests
+
+WEATHER_KEY = os.getenv('WEATHER_APP_KEY')
+if WEATHER_KEY is None:
+    print("Weather key env variable not set.", file=sys.stderr)
+    quit(1)
+
+URL = 'https://api.openweathermap.org/data/2.5/weather'
 
 HEIGHT = 500
 WIDTH = 800
 
 
-#passing in the json received from the API
 def get_response(weather):
+    """Parse the API response into a presentable string"""
     try:
         name_of_city = weather['name']
-        # print(name_of_city)
         description = weather['weather'][0]['description']
-        # print(description)
         temp = weather['main']['temp']
         return "The name of the city: {}\nTemperature: {} Degree celsius\nDescription: {}".format(
             name_of_city, temp, description
@@ -22,15 +28,11 @@ def get_response(weather):
 
 
 def get_the_weather(city):
-    weather_key = '286c1a921db08ce5971c879b7671efce'
-    #get your own key
-
-    url = 'https://api.openweathermap.org/data/2.5/weather'
-    parameters = {'APPID': weather_key, 'q': city, 'units': 'Metric'}
+    parameters = {'APPID': WEATHER_KEY, 'q': city, 'units': 'Metric'}
     # using Metric because we want the weather in degree celsius
     # To get weather in fahrenheit --> Imperial
 
-    response = requests.get(url, params=parameters)
+    response = requests.get(URL, params=parameters)
     weather = response.json()
     label['text'] = get_response(weather)
 
