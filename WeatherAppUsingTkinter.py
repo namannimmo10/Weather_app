@@ -1,7 +1,9 @@
-import os, sys
-import tkinter as tk
-from tkinter import font
+import os
+import sys
 import requests
+import tkinter as tk
+
+from tkinter import font
 
 WEATHER_KEY = os.getenv('WEATHER_APP_KEY')
 if WEATHER_KEY is None:
